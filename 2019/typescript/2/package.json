@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/gareth-allan/advent-of-code/issues"
   },
-  "homepage": "https://github.com/gareth-allan/advent-of-code#readme"
+  "homepage": "https://github.com/gareth-allan/advent-of-code#readme",
+  "dependencies": {
+    "@types/node": "^12.12.14"
+  }
 }
