@@ -38,7 +38,37 @@ class TwoAdjacentDigitsTheSameRule implements PasswordMatchingRule {
     }
 }
 
-class NonDecreasingDigitsRule implements PasswordMatchingRule {
+class ExactlyTwoAdjacentDigitsTheSameRule implements PasswordMatchingRule {
+
+    matches(password: number): boolean {
+        const TARGET_NUMBER_OF_DUPLICATES = 2;
+
+        let match = false;
+
+        const stringPassword = password.toString();
+        let numAdjacentDuplicates = 1;
+        for (let c: number = 1; c < stringPassword.length; c++) {
+            if (stringPassword[c - 1] == stringPassword[c]) {
+                numAdjacentDuplicates++;
+            } else {
+                if (numAdjacentDuplicates == TARGET_NUMBER_OF_DUPLICATES) {
+                    break;
+                } else {
+                    // Reset adjacent duplicates count.
+                    numAdjacentDuplicates = 1;
+                }
+            }
+        }
+
+        if (numAdjacentDuplicates == TARGET_NUMBER_OF_DUPLICATES) {
+            match = true;
+        }
+
+        return match;
+    }
+}
+
+class NoDecreasingDigitsRule implements PasswordMatchingRule {
     matches(password: number): boolean {
         let match = true;
 
@@ -53,16 +83,26 @@ class NonDecreasingDigitsRule implements PasswordMatchingRule {
     }
 }
 
-const matcher: PasswordMatcher = new PasswordMatcher(
+const part1Matcher: PasswordMatcher = new PasswordMatcher(
     new TwoAdjacentDigitsTheSameRule(),
-    new NonDecreasingDigitsRule()
+    new NoDecreasingDigitsRule()
+);
+const part2Matcher: PasswordMatcher = new PasswordMatcher(
+    new ExactlyTwoAdjacentDigitsTheSameRule(),
+    new NoDecreasingDigitsRule()
 );
 
-const matchingPasswords: number[] = [];
+const part1MatchingPasswords: number[] = [];
+const part2MatchingPasswords: number[] = [];
 for (let passwordAttempt = MIN_VALUE; passwordAttempt <= MAX_VALUE; passwordAttempt++) {
-    if (matcher.matches(passwordAttempt)) {
-        matchingPasswords.push(passwordAttempt);
+    if (part1Matcher.matches(passwordAttempt)) {
+        part1MatchingPasswords.push(passwordAttempt);
+    }
+
+    if (part2Matcher.matches(passwordAttempt)) {
+        part2MatchingPasswords.push(passwordAttempt);
     }
 }
 
-console.log(matchingPasswords.length + " passwords matched the criteria.");
+console.log("Part 1: " + part1MatchingPasswords.length + " passwords matched the criteria.");
+console.log("Part 2: " + part2MatchingPasswords.length + " passwords matched the criteria.");
