@@ -1,1 +1,3 @@
+cd 2024
+
 npx lint-staged
